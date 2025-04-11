@@ -34,11 +34,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
-    return render_template('./home.html')
+    return render_template('./index.html')
 
 @app.route('/home')
 def home():
-    return render_template('./home.html')
+    return render_template('./index.html')
 
    
 @app.route('/analyze_image', methods=['POST'])
