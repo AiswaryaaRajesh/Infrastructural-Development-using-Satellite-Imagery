@@ -62,7 +62,7 @@ header.masthead {
     padding-top: 15rem;
     padding-bottom: 15rem;
     color: #fff;
-    background-image: url("http://127.0.0.1:5000/static/img/home_bg.jpg");
+    background-image: url("./static/img/home_bg.jpg");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: cover;
