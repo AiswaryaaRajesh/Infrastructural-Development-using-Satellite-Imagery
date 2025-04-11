@@ -60,7 +60,7 @@ def create_train_data():
         training_data.append([img, label])
     shuffle(training_data)
     # Convert to numpy array with dtype=object to avoid shape mismatch
-    np.save('train_data.npy', np.array(training_data, dtype=object))
+    np.save('./train_data.npy', np.array(training_data, dtype=object))
     return training_data
 
 def process_test_data():
@@ -75,7 +75,7 @@ def process_test_data():
         testing_data.append([np.array(img), img_num])
         
     shuffle(testing_data)
-    np.save('test_data.npy', testing_data)
+    np.save('./test_data.npy', testing_data)
     return testing_data
 
 train_data = create_train_data()
