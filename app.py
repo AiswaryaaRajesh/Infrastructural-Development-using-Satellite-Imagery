@@ -24,8 +24,6 @@ app = Flask(__name__, static_folder="static")
 def serve_static(filename):
     return send_from_directory('static', filename)
 
-# Database Connection
-DB_PATH = 'user_data.db'
 MODEL_NAME = 'infra-1e-3-2conv-basic.model'
 IMG_SIZE = 50
 LR = 1e-3
@@ -36,80 +34,29 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
-    return render_template('home.html')
-
-"""
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/logout')
-def logout():
-    return render_template('index.html')
-"""
+    return render_template('./home.html')
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    return render_template('./home.html')
 
-"""
-@app.route('/userlog', methods=['GET', 'POST'])
-def userlog():
-    if request.method == 'POST':
-        name = request.form['name']
-        password = request.form['password']
-
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        query = "SELECT name FROM user WHERE name=? AND password=?"
-        cursor.execute(query, (name, password))
-        result = cursor.fetchone()
-        connection.close()
-        
-        if result:
-            return redirect(url_for('home'))
-        return render_template('index.html', msg='Incorrect Credentials')
-    
-    return render_template('index.html')
-
-@app.route('/userreg', methods=['GET', 'POST'])
-def userreg():
-    if request.method == 'POST':
-        name = request.form['name']
-        password = request.form['password']
-        mobile = request.form['phone']
-        email = request.form['email']
-
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        cursor.execute(CREATE TABLE IF NOT EXISTS user(
-                        name TEXT, password TEXT, mobile TEXT, email TEXT)
-                    )
-        cursor.execute("INSERT INTO user VALUES (?, ?, ?, ?)", (name, password, mobile, email))
-        connection.commit()
-        connection.close()
-
-        return redirect(url_for('index'))
-    
-    return render_template('index.html')
-"""
-    
+   
 @app.route('/analyze_image', methods=['POST'])
 def analyze_image():
     try:
         if 'filename' not in request.files:
-            print("❌ No file part in request")
+            print("No file part in request")
             return redirect(url_for('home', msg='No file selected'))
 
         file = request.files['filename']
         if file.filename == '':
-            print("❌ File name is empty")
+            print("File name is empty")
             return redirect(url_for('home', msg='No file selected'))
 
         # Save uploaded file
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(file_path)
-        print(f"📁 File saved to: {file_path}")
+        print(f"File saved to: {file_path}")
 
         # Preprocess image
         def process_verify_data():
@@ -163,14 +110,14 @@ def analyze_image():
         print(f"📊 Prediction: {label}, Accuracy: {accuracy}")
 
         return render_template(
-            'result.html',
+            './result.html',
             label=label,
             accuracy_value=accuracy,
             ImageDisplay=f"/static/uploads/{file.filename}"
         )
 
     except Exception as e:
-        print("🔥 Exception during image analysis:", str(e))
+        print("Exception during image analysis:", str(e))
         return f"Internal server error: {str(e)}", 500
 
 
@@ -210,7 +157,7 @@ def predict_combined():
 
     str_label = ', '.join(reasons) if reasons else 'Good Infrastructure Development'
 
-    return render_template('result.html', status2=f'Predicted Infrastructure Development Level: {predicted_infra_level:.2f}', reasons=str_label)
+    return render_template('./result.html', status2=f'Predicted Infrastructure Development Level: {predicted_infra_level:.2f}', reasons=str_label)
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
